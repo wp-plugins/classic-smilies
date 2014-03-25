@@ -5,7 +5,7 @@ Plugin URI: http://ottopress.com/wordpress-plugins/classic-smilies/
 Description: Puts back the original smilies.
 Version: 1.0
 Author: Otto
-Author URI: Author URI: http://ottodestruct.com
+Author URI: http://ottopress.com
 License: GPLv2
 License URI: 
 Text Domain: classic-smilies
