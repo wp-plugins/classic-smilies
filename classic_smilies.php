@@ -2,12 +2,12 @@
 /*
 Plugin Name: Classic Smilies
 Plugin URI: http://ottopress.com/wordpress-plugins/classic-smilies/
-Description: Puts back the original smilies.
-Version: 1.0
+Description: Puts back the original smilies that got replaced with the newer, uglier, ones. Also disables all traces of emoji.
+Version: 1.1
 Author: Otto
-Author URI: http://ottopress.com
+Author URI: Author URI: http://ottodestruct.com
 License: GPLv2
-License URI: 
+License URI: https://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain: classic-smilies
 */
 
@@ -15,11 +15,13 @@ Text Domain: classic-smilies
 function classic_smilies_src( $old, $img ) {
 	return plugins_url( "img/{$img}", __FILE__ );
 }
-	
-// force the use of the classic smilies
-function classic_smilies_init() {
-	global $wpsmiliestrans;
 
+add_action( 'init', 'classic_smilies_init', 1 );
+	
+function classic_smilies_init() {
+
+	// put the classic smilies images back
+	global $wpsmiliestrans;
 	$wpsmiliestrans = array(
 	':mrgreen:' => 'icon_mrgreen.gif',
 	':neutral:' => 'icon_neutral.gif',
@@ -68,8 +70,22 @@ function classic_smilies_init() {
 	      ':?:' => 'icon_question.gif',
 	);
 
-
 	add_filter( 'smilies_src', 'classic_smilies_src', 10, 2 );
+	
+	// disable any and all mention of emoji's
+	remove_filter( 'the_content_feed', 'feed_emoji' );
+	remove_filter( 'comment_text_rss', 'feed_emoji' );
+	remove_filter( 'wp_mail', 'mail_emoji' );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'admin_print_styles', 'print_emoji_styles' );
+	wp_deregister_script( 'twemoji' );
+	wp_deregister_script( 'emoji' );
+	wp_register_script( 'twemoji', '' );
+	wp_register_script( 'emoji', '' );
+	add_filter( 'tiny_mce_plugins', 'classic_smilies_rm_tinymce_emoji' );
 }
 
-add_action( 'init', 'classic_smilies_init', 1 );
+// filter function used to remove the tinymce emoji plugin
+function classic_smilies_rm_tinymce_emoji( $plugins ) {
+	return array_diff( $plugins, array( 'wpemoji' ) );
+}
