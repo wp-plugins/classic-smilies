@@ -16,6 +16,9 @@ Added bonus: Disables all "emoji" functionality in WordPress 4.2 and above.
 
 == Changelog ==
 
+= 1.2 =
+* Updated emoji removal code for 4.2RC3. Should be the same code in 4.2 final.
+
 = 1.1 =
 * Disables all of the "emoji" features in WordPress 4.2+
 

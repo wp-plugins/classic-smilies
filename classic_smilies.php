@@ -3,7 +3,7 @@
 Plugin Name: Classic Smilies
 Plugin URI: http://ottopress.com/wordpress-plugins/classic-smilies/
 Description: Puts back the original smilies that got replaced with the newer, uglier, ones. Also disables all traces of emoji.
-Version: 1.1
+Version: 1.2
 Author: Otto
 Author URI: Author URI: http://ottodestruct.com
 License: GPLv2
@@ -73,16 +73,15 @@ function classic_smilies_init() {
 	add_filter( 'smilies_src', 'classic_smilies_src', 10, 2 );
 	
 	// disable any and all mention of emoji's
-	remove_filter( 'the_content_feed', 'feed_emoji' );
-	remove_filter( 'comment_text_rss', 'feed_emoji' );
-	remove_filter( 'wp_mail', 'mail_emoji' );
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
-	remove_action( 'admin_print_styles', 'print_emoji_styles' );
-	wp_deregister_script( 'twemoji' );
-	wp_deregister_script( 'emoji' );
-	wp_register_script( 'twemoji', '' );
-	wp_register_script( 'emoji', '' );
-	add_filter( 'tiny_mce_plugins', 'classic_smilies_rm_tinymce_emoji' );
+	remove_action( 'admin_print_styles', 'print_emoji_styles' );	
+	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );	
+	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+	add_filter( 'tiny_mce_plugins', 'classic_smilies_rm_tinymce_emoji' );	
+
 }
 
 // filter function used to remove the tinymce emoji plugin
