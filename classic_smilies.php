@@ -2,8 +2,8 @@
 /*
 Plugin Name: Classic Smilies
 Plugin URI: http://ottopress.com/wordpress-plugins/classic-smilies/
-Description: Puts back the original smilies that got replaced with the newer, uglier, ones. Also disables all traces of emoji.
-Version: 1.2
+Description: Puts back the original smilies from earlier versions of WordPress. Also disables all additional scripts for emoji support.
+Version: 1.3
 Author: Otto
 Author URI: Author URI: http://ottodestruct.com
 License: GPLv2
@@ -80,11 +80,17 @@ function classic_smilies_init() {
 	remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
 	remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );	
 	remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-	add_filter( 'tiny_mce_plugins', 'classic_smilies_rm_tinymce_emoji' );	
-
+	add_filter( 'tiny_mce_plugins', 'classic_smilies_rm_tinymce_emoji' );
+	add_filter( 'the_content', 'classic_smilies_rm_additional_styles', 11 );
+	add_filter( 'the_excerpt', 'classic_smilies_rm_additional_styles', 11 );
+	add_filter( 'comment_text', 'classic_smilies_rm_additional_styles', 21 );
 }
 
 // filter function used to remove the tinymce emoji plugin
 function classic_smilies_rm_tinymce_emoji( $plugins ) {
 	return array_diff( $plugins, array( 'wpemoji' ) );
+}
+
+function classic_smilies_rm_additional_styles( $content ) {
+	return str_replace( 'class="wp-smiley" style="height: 1em; max-height: 1em;"', 'class="wp-smiley"', $content );
 }

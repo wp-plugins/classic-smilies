@@ -2,7 +2,7 @@
 Contributors: Otto42
 Plugin Name: Classic Smilies
 Tags: smilies, classic
-Requires at least: 3.9
+Requires at least: 4.2
 Tested up to: 4.2
 Stable tag: trunk
 
@@ -15,6 +15,9 @@ Replace the smilies with the original versions from previous versions of WordPre
 Added bonus: Disables all "emoji" functionality in WordPress 4.2 and above.
 
 == Changelog ==
+
+= 1.3 =
+* Added additional code to remove the default 1em styling from smilies, which was added in WordPress 4.2.
 
 = 1.2 =
 * Updated emoji removal code for 4.2RC3. Should be the same code in 4.2 final.
